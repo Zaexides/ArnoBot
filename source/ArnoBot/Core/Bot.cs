@@ -2,7 +2,7 @@
 
 namespace ArnoBot.Core
 {
-    public class Bot
+    public class Bot : IDisposable
     {
         private static Bot singleton;
 
@@ -10,6 +10,7 @@ namespace ArnoBot.Core
 
         private Bot()
         {
+            ModuleRegistry = new ModuleRegistry();
         }
 
         public static Bot CreateOrGet()
@@ -19,6 +20,11 @@ namespace ArnoBot.Core
                 singleton = new Bot();
             }
             return singleton;
+        }
+
+        public void Dispose()
+        {
+            singleton = null;
         }
     }
 }

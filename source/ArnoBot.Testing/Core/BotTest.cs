@@ -11,10 +11,18 @@ namespace ArnoBot.Testing.Core
     [TestFixture]
     public class BotTest
     {
+        Bot bot;
 
-        public Bot Setup()
+        [SetUp]
+        public void SetUp()
         {
-            return Bot.CreateOrGet();
+            bot = Bot.CreateOrGet();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            bot.Dispose();
         }
 
         [Test]
@@ -30,6 +38,22 @@ namespace ArnoBot.Testing.Core
             Bot botRef1 = Bot.CreateOrGet();
             Bot botRef2 = Bot.CreateOrGet();
             Assert.AreSame(botRef1, botRef2);
+        }
+
+        [Test]
+        public void GetModuleRegistry_NotNull()
+        {
+            Assert.NotNull(bot.ModuleRegistry);
+        }
+
+        [Test]
+        public void CreateOrGet_ReturnNewObject_AfterDispose()
+        {
+            Bot bot1 = Bot.CreateOrGet();
+            bot1.Dispose();
+            Bot bot2 = Bot.CreateOrGet();
+
+            Assert.AreNotSame(bot1, bot2);
         }
     }
 }
