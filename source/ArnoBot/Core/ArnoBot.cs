@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ArnoBot
+namespace ArnoBot.Core
 {
     public class ArnoBot
     {

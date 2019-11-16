@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArnoBot.Testing
+namespace ArnoBot.Interface
 {
-    class ArnoBotTest
+    public interface ICommand
     {
     }
 }
