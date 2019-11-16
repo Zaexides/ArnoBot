@@ -6,6 +6,8 @@ namespace ArnoBot.Core
     {
         private static Bot singleton;
 
+        public ModuleRegistry ModuleRegistry { get; }
+
         private Bot()
         {
         }
