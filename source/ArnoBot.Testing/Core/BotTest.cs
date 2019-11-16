@@ -24,5 +24,12 @@ namespace ArnoBot.Testing.Core
             Assert.NotNull(bot);
         }
 
+        [Test]
+        public void CreateOrGet_ReturnSameObject()
+        {
+            Bot botRef1 = Bot.CreateOrGet();
+            Bot botRef2 = Bot.CreateOrGet();
+            Assert.AreSame(botRef1, botRef2);
+        }
     }
 }

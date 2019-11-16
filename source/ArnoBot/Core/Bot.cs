@@ -12,7 +12,11 @@ namespace ArnoBot.Core
 
         public static Bot CreateOrGet()
         {
-            return null;
+            if(singleton == null)
+            {
+                singleton = new Bot();
+            }
+            return singleton;
         }
     }
 }
