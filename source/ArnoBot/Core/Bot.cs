@@ -1,5 +1,7 @@
 ﻿using System;
 
+using ArnoBot.Interface;
+
 namespace ArnoBot.Core
 {
     public class Bot : IDisposable
@@ -20,6 +22,17 @@ namespace ArnoBot.Core
                 singleton = new Bot();
             }
             return singleton;
+        }
+
+        public Response Query(string command)
+        {
+            CommandContext context = CommandContext.Parse(command);
+            foreach(IModule module in ModuleRegistry.GetModules())
+            {
+                if (module.CommandRegistry.ContainsKey(context.CommandName))
+                    return module.CommandRegistry[context.CommandName].Execute(context);
+            }
+            return new Response.Builder(Response.Type.NotFound, $"Command {context.CommandName} could not be found.").Build();
         }
 
         public void Dispose()

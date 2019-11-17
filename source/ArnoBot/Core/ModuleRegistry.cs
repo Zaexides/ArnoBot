@@ -19,6 +19,8 @@ namespace ArnoBot.Core
             get => moduleRegistry[moduleName];
         }
 
+        public IEnumerable<IModule> GetModules() => moduleRegistry.Values;
+
         public void RegisterModule(IModule module)
         {
             if (moduleRegistry.ContainsKey(module.Name))

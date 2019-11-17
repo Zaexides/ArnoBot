@@ -7,5 +7,7 @@ namespace ArnoBot.Interface
     public interface IModule
     {
         string Name { get; }
+
+        IReadOnlyDictionary<string, ICommand> CommandRegistry { get; }
     }
 }

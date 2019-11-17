@@ -48,6 +48,8 @@ namespace ArnoBot.Testing.Core
         public class MockModule : IModule
         {
             public string Name { get => MOCK_MODULE_NAME; }
+
+            public IReadOnlyDictionary<string, ICommand> CommandRegistry => throw new NotImplementedException();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 
 using ArnoBot.Core;
+using ArnoBot.Interface;
 
 namespace ArnoBot.Testing.Core
 {
@@ -17,6 +18,7 @@ namespace ArnoBot.Testing.Core
         public void SetUp()
         {
             bot = Bot.CreateOrGet();
+            bot.ModuleRegistry.RegisterModule(new MockModule());
         }
 
         [TearDown]
@@ -54,6 +56,49 @@ namespace ArnoBot.Testing.Core
             Bot bot2 = Bot.CreateOrGet();
 
             Assert.AreNotSame(bot1, bot2);
+        }
+
+        [Test]
+        public void Query_MockCommand_Input1Parameter_ReturnsSameParametersInResponseBody()
+        {
+            string input = "mock test";
+            string responseBody = bot.Query(input).Body;
+
+            Assert.AreEqual(input, responseBody);
+        }
+
+        [Test]
+        public void Query_MockCommand_Input4Parameters_ReturnsSameParametersInResponseBody()
+        {
+            string input = "mock this test should succeed!";
+            string responseBody = bot.Query(input).Body;
+
+            Assert.AreEqual(input, responseBody);
+        }
+
+        class MockModule : IModule
+        {
+            public string Name => "__Mock";
+
+            private Dictionary<string, ICommand> commandRegistry = new Dictionary<string, ICommand>();
+
+            public IReadOnlyDictionary<string, ICommand> CommandRegistry => commandRegistry;
+
+            public MockModule()
+            {
+                commandRegistry.Add("mock", new MockCommand());
+            }
+
+            class MockCommand : ICommand
+            {
+                public Response Execute(CommandContext context)
+                {
+                    StringBuilder responseBody = new StringBuilder(context.CommandName + " ");
+                    responseBody.AppendJoin(' ', context.Parameters);
+
+                    return new Response.Builder(Response.Type.Executed, responseBody.ToString()).Build();
+                }
+            }
         }
     }
 }
