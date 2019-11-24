@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using ArnoBot.Interface;
 
@@ -33,6 +34,15 @@ namespace ArnoBot.Core
                     return module.CommandRegistry[context.CommandName].Execute(context);
             }
             return new Response.Builder(Response.Type.NotFound, $"Command {context.CommandName} could not be found.").Build();
+        }
+
+        public void QueryAsync(string command, Action<Response> callback)
+        {
+            Task task = new Task(() =>
+            {
+                callback(Query(command));
+            });
+            task.Start();
         }
 
         public void Dispose()
