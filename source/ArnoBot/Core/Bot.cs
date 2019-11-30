@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using ArnoBot.Interface;
+using ArnoBot.Core.Responses;
 
 namespace ArnoBot.Core
 {
@@ -28,12 +29,12 @@ namespace ArnoBot.Core
         public Response Query(string command)
         {
             CommandContext context = CommandContext.Parse(command);
-            foreach(IModule module in ModuleRegistry.GetModules())
+            foreach (IModule module in ModuleRegistry.GetModules())
             {
                 if (module.CommandRegistry.ContainsKey(context.CommandName))
                     return module.CommandRegistry[context.CommandName].Execute(context);
             }
-            return new Response.Builder(Response.Type.NotFound, $"Command {context.CommandName} could not be found.").Build();
+            return new TextResponse(Response.Type.NotFound, $"Command {context.CommandName} could not be found.");
         }
 
         public void QueryAsync(string command, Action<Response> callback)
