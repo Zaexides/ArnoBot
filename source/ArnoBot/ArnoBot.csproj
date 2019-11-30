@@ -5,9 +5,4 @@
     <Version>0.0.1</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\Entity\" />
-    <Folder Include="DefaultModules\Core\" />
-  </ItemGroup>
-
 </Project>
