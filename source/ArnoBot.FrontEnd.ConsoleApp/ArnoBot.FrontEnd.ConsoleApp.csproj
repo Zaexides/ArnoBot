@@ -8,4 +8,9 @@
     <Version>0.0.1</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArnoBot.Modules.Core\ArnoBot.Modules.Core.csproj" />
+    <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
+  </ItemGroup>
+
 </Project>
