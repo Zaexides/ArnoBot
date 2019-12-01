@@ -23,6 +23,22 @@ namespace ArnoBot.Core.Responses
                 this.Paragraphs = paragraphs;
             }
 
+            public override string ToString()
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append("--").Append(Title).AppendLine("--");
+                foreach(Paragraph p in Paragraphs)
+                {
+                    sb.AppendLine(p.Title);
+                    sb.Append("\t").AppendLine(p.Body);
+                }
+                sb.AppendLine("");
+                sb.AppendLine(Footer);
+
+                return sb.ToString();
+            }
+
             public class Paragraph
             {
                 public string Title { get; }

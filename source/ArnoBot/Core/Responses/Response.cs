@@ -14,6 +14,11 @@ namespace ArnoBot.Core.Responses
             this.ResponseType = type;
             this.Body = body;
         }
+
+        public override string ToString()
+        {
+            return $"[{ResponseType.ToString()}] {Body.ToString()}";
+        }
     }
 
     public abstract class Response
