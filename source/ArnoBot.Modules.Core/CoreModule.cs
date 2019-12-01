@@ -24,6 +24,7 @@ namespace ArnoBot.Modules.Core
         private void InitializeCommands()
         {
             commandRegistry.Add("about", new AboutCommand());
+            commandRegistry.Add("echo", new EchoCommand());
         }
     }
 }
