@@ -4,11 +4,13 @@ using System.Text;
 
 using ArnoBot.Interface;
 
+using ArnoBot.Modules.Core.Commands;
+
 namespace ArnoBot.Modules.Core
 {
     public class CoreModule : IModule
     {
-        private Dictionary<string, ICommand> commandRegistry;
+        private Dictionary<string, ICommand> commandRegistry = new Dictionary<string, ICommand>();
 
         public string Name => "Core";
 
@@ -21,7 +23,7 @@ namespace ArnoBot.Modules.Core
 
         private void InitializeCommands()
         {
-
+            commandRegistry.Add("about", new AboutCommand());
         }
     }
 }
