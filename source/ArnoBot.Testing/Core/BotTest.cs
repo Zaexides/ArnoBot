@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 
 using ArnoBot.Core;
+using ArnoBot.Core.Responses;
 using ArnoBot.Interface;
 
 namespace ArnoBot.Testing.Core
@@ -62,7 +63,7 @@ namespace ArnoBot.Testing.Core
         public void Query_MockCommand_Input1Parameter_ReturnsSameParametersInResponseBody()
         {
             string input = "mock test";
-            string responseBody = bot.Query(input).Body;
+            string responseBody = bot.Query(input).TextBody;
 
             Assert.AreEqual(input, responseBody);
         }
@@ -71,7 +72,7 @@ namespace ArnoBot.Testing.Core
         public void Query_MockCommand_Input4Parameters_ReturnsSameParametersInResponseBody()
         {
             string input = "mock this test should succeed!";
-            string responseBody = bot.Query(input).Body;
+            string responseBody = bot.Query(input).TextBody;
 
             Assert.AreEqual(input, responseBody);
         }
@@ -96,7 +97,7 @@ namespace ArnoBot.Testing.Core
                     StringBuilder responseBody = new StringBuilder(context.CommandName + " ");
                     responseBody.AppendJoin(' ', context.Parameters);
 
-                    return new Response.Builder(Response.Type.Executed, responseBody.ToString()).Build();
+                    return new TextResponse(Response.Type.Executed, responseBody.ToString());
                 }
             }
         }

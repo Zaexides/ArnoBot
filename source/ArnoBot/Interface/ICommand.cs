@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using ArnoBot.Core;
+using ArnoBot.Core.Responses;
 
 namespace ArnoBot.Interface
 {
