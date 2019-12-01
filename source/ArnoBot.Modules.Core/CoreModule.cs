@@ -16,6 +16,11 @@ namespace ArnoBot.Modules.Core
 
         public CoreModule()
         {
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
 
         }
     }
