@@ -9,19 +9,23 @@ using ArnoBot.Interface;
 
 namespace ArnoBot.ModuleLoader
 {
-    public class ModuleLoader
+    public static class ModuleLoader
     {
         private const string MODULE_FOLDER = "/modules";
 
-        public void LoadModules(ModuleRegistry moduleRegistry)
+        public static void LoadModules(ModuleRegistry moduleRegistry)
         {
             IEnumerable<Assembly> libaries = LoadLibraries();
             IEnumerable<IModule> modules = LoadModules(libaries);
             RegisterModules(modules, moduleRegistry);
         }
 
-        private IEnumerable<Assembly> LoadLibraries()
+        private static IEnumerable<Assembly> LoadLibraries()
         {
+            string directoryPath = Environment.CurrentDirectory + MODULE_FOLDER;
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
+
             string[] libraryPaths = Directory.GetFiles(
                 Environment.CurrentDirectory + MODULE_FOLDER,
                 "*.dll",
@@ -36,7 +40,7 @@ namespace ArnoBot.ModuleLoader
             }
         }
 
-        private Assembly LoadLibrary(string path)
+        private static Assembly LoadLibrary(string path)
         {
             Assembly library;
 
@@ -52,7 +56,7 @@ namespace ArnoBot.ModuleLoader
             return library;
         }
 
-        private IEnumerable<IModule> LoadModules(IEnumerable<Assembly> libraries)
+        private static IEnumerable<IModule> LoadModules(IEnumerable<Assembly> libraries)
         {
             foreach(Assembly assembly in libraries)
             {
@@ -62,7 +66,7 @@ namespace ArnoBot.ModuleLoader
             }
         }
 
-        private IEnumerable<IModule> LoadModulesInAssembly(Assembly assembly)
+        private static IEnumerable<IModule> LoadModulesInAssembly(Assembly assembly)
         {
             IEnumerable<Type> moduleTypes =
                 assembly.GetTypes()
@@ -87,7 +91,7 @@ namespace ArnoBot.ModuleLoader
             }
         }
 
-        private void RegisterModules(IEnumerable<IModule> modules, ModuleRegistry moduleRegistry)
+        private static void RegisterModules(IEnumerable<IModule> modules, ModuleRegistry moduleRegistry)
         {
             foreach (IModule module in modules)
                 moduleRegistry.RegisterModule(module);
