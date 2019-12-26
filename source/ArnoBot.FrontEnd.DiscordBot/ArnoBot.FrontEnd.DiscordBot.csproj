@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArnoBot.ModuleLoader\ArnoBot.ModuleLoader.csproj" />
+    <ProjectReference Include="..\ArnoBot.Modules.Core\ArnoBot.Modules.Core.csproj" />
+    <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
