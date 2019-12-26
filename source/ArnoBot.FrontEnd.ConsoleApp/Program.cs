@@ -5,28 +5,32 @@ using ArnoBot.Core.Responses;
 
 using ArnoBot.Modules.Core;
 
+using ArnoBot.ModuleLoader;
+
 namespace ArnoBot.FrontEnd.ConsoleApp
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Bot bot = InitializeBot();
+            ModuleLoader.ModuleLoader.LoadModules(bot.ModuleRegistry);
+
             if (args.Length > 0)
-                ExecuteSingleCommand(args);
+                ExecuteSingleCommand(bot, args);
             else
-                RunLoop();
+                RunLoop(bot);
         }
 
-        static void ExecuteSingleCommand(string[] args)
+        static void ExecuteSingleCommand(Bot bot, string[] args)
         {
-            Response response = InitializeBot().Query(string.Join(" ", args));
+            Response response = bot.Query(string.Join(" ", args));
             Console.WriteLine(response);
         }
 
-        static void RunLoop()
+        static void RunLoop(Bot bot)
         {
             string input;
-            Bot bot = InitializeBot();
 
             Console.WriteLine("Awaiting input.");
             Console.Write("> ");

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ArnoBot.ModuleLoader\ArnoBot.ModuleLoader.csproj" />
     <ProjectReference Include="..\ArnoBot.Modules.Core\ArnoBot.Modules.Core.csproj" />
     <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
   </ItemGroup>
