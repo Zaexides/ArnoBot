@@ -70,7 +70,7 @@ namespace ArnoBot.ModuleLoader
         {
             IEnumerable<Type> moduleTypes =
                 assembly.GetTypes()
-                .Where((type) => type.IsSubclassOf(typeof(IModule)))
+                .Where((type) => (typeof(IModule)).IsAssignableFrom(type))
                 .Where((type) => (!type.IsAbstract && !type.IsInterface));
 
             foreach (Type moduleType in moduleTypes)
