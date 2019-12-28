@@ -6,7 +6,6 @@ namespace ArnoBot.Core.Responses
 {
     public abstract class Response<T> : Response
     {
-        public Response.Type ResponseType { get; }
         public T Body { get; }
 
         protected Response(Response.Type type, T body)
@@ -25,6 +24,7 @@ namespace ArnoBot.Core.Responses
     {
         public string TextBody { get => ((TextResponse)this).Body; }
         public Exception Exception { get => ((ErrorResponse)this).Body; }
+        public Response.Type ResponseType { get; protected set; }
 
         public enum Type : uint
         {
