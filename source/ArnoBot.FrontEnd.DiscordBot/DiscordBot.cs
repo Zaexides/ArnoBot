@@ -12,17 +12,15 @@ namespace ArnoBot.FrontEnd.DiscordBot
     public class DiscordBot
     {
         private const int RECONNECT_DELAY = 10000;
-
-        private Bot bot;
         private DiscordSocketClient discordClient;
 
         public Settings Settings { get; }
 
         public DiscordBot()
         {
-            bot = InitializeBot();
+            Bot bot = InitializeBot();
             Settings = Settings.Load();
-            InitializeDiscordIntegration();
+            InitializeDiscordIntegration(bot);
         }
 
         private Bot InitializeBot()
@@ -33,9 +31,10 @@ namespace ArnoBot.FrontEnd.DiscordBot
             return bot;
         }
 
-        private void InitializeDiscordIntegration()
+        private void InitializeDiscordIntegration(Bot bot)
         {
             discordClient = new DiscordSocketClient();
+            new MessageHandler(discordClient, bot, Settings.Prefix);
         }
 
         public async Task Run()
