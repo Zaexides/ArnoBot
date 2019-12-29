@@ -10,17 +10,11 @@ namespace ArnoBot.Core
     {
         private static Bot singleton;
 
-        public FindCommandFromContext FindCommandFromContextDelegate { get; set; }
-        public ExecuteCommand ExecuteCommandDelegate { get; set; }
-        public ParseCommandContext ParseCommandContextDelegate { get; set; }
         public ModuleRegistry ModuleRegistry { get; }
 
         private Bot()
         {
             ModuleRegistry = new ModuleRegistry();
-            FindCommandFromContextDelegate = new FindCommandFromContext(FindCommandFromContextInternal);
-            ExecuteCommandDelegate = new ExecuteCommand(ExecuteCommandInternal);
-            ParseCommandContextDelegate = new ParseCommandContext(CommandContext.Parse);
         }
 
         public static Bot CreateOrGet()
@@ -32,21 +26,20 @@ namespace ArnoBot.Core
             return singleton;
         }
 
-        public Response Query(string command)
+        public Response Query(string command, Action<ICommand, CommandContext> executeAction)
         {
             CommandContext commandContext = CommandContext.Parse(command);
-            ICommand commandObject = FindCommandFromContextDelegate(commandContext);
+            ICommand commandObject = FindCommandFromContext(commandContext);
             if (commandObject == null)
                 return new ErrorResponse(Response.Type.NotFound, new CommandNotFoundException($"Command \"{commandContext.CommandName}\" could not be found."));
             else
-                return ExecuteCommandDelegate(commandObject, commandContext);
+                return ExecuteCommand(commandObject, commandContext);
         }
 
-        public delegate CommandContext ParseCommandContext(string command);
-        public delegate ICommand FindCommandFromContext(CommandContext commandContext);
-        public delegate Response ExecuteCommand(ICommand command, CommandContext commandContext);
+        public Response Query(string command)
+            => Query(command, (commandObject, ctx) => commandObject.Execute(ctx));
 
-        private ICommand FindCommandFromContextInternal(CommandContext commandContext)
+        private ICommand FindCommandFromContext(CommandContext commandContext)
         {
             foreach(IModule module in ModuleRegistry.GetModules())
             {
@@ -56,7 +49,7 @@ namespace ArnoBot.Core
             return null;
         }
 
-        private Response ExecuteCommandInternal(ICommand command, CommandContext commandContext)
+        private Response ExecuteCommand(ICommand command, CommandContext commandContext)
         {
             try
             {
@@ -68,7 +61,7 @@ namespace ArnoBot.Core
             }
         }
 
-        public void QueryAsync(string command, Action<Response> callback)
+        public void QueryAsync(string command, Action<ICommand, CommandContext> executeAction, Action<Response> callback)
         {
             Task task = new Task(() =>
             {
@@ -76,6 +69,9 @@ namespace ArnoBot.Core
             });
             task.Start();
         }
+
+        public void QueryAsync(string command, Action<Response> callback)
+            => QueryAsync(command, (commandObject, ctx) => commandObject.Execute(ctx), callback);
 
         public void Dispose()
         {
