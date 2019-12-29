@@ -62,7 +62,7 @@ namespace ArnoBot.Core
         {
             Task task = new Task(() =>
             {
-                callback(Query(command));
+                callback(Query(command, executeAction));
             });
             task.Start();
         }
