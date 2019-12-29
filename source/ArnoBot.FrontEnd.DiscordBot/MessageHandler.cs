@@ -37,15 +37,22 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private async Task ParseResponseIntoDiscordMessage(SocketUser user, ISocketMessageChannel channel, Response response)
         {
-            EmbedBuilder builder = new EmbedBuilder()
-                .WithColor(GetColorFromResponseType(response.ResponseType))
-                .WithAuthor(
-                new EmbedAuthorBuilder()
-                    .WithName(user.Username)
-                    .WithIconUrl(user.GetAvatarUrl(size: 64))
-                );
-            SetEmbedContentFromResponse(builder, response);
-            await channel.SendMessageAsync(embed: builder.Build());
+            try
+            {
+                EmbedBuilder builder = new EmbedBuilder()
+                    .WithColor(GetColorFromResponseType(response.ResponseType))
+                    .WithAuthor(
+                    new EmbedAuthorBuilder()
+                        .WithName(user.Username)
+                        .WithIconUrl(user.GetAvatarUrl(size: 64))
+                    );
+                SetEmbedContentFromResponse(builder, response);
+                await channel.SendMessageAsync(embed: builder.Build());
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error: " + ex);
+            }
         }
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, Response response)
@@ -67,10 +74,13 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             builder.WithTitle(extendedResponse.Body.Title)
                 .WithFooter(extendedResponse.Body.Footer)
-                .WithFields(extendedResponse.Body.Paragraphs.Select((paragraph) => {
-                    return new EmbedFieldBuilder()
-                        .WithName(paragraph.Title)
-                        .WithValue(paragraph.Body);
+                .WithFields(extendedResponse.Body.Paragraphs
+                    .Where((paragraph) => !paragraph.Body.Equals(string.Empty))
+                    .Select((paragraph) => {
+                        return new EmbedFieldBuilder()
+                            .WithName(paragraph.Title)
+                            .WithValue(paragraph.Body)
+                            .WithIsInline(true);
                 }));
         }
 
