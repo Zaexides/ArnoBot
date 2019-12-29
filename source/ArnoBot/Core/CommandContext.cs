@@ -11,7 +11,7 @@ namespace ArnoBot.Core
         public string CommandName { get; }
         public object[] Parameters { get; }
 
-        private CommandContext(string commandName, object[] parameters)
+        protected CommandContext(string commandName, object[] parameters)
         {
             this.CommandName = commandName;
             this.Parameters = parameters;
