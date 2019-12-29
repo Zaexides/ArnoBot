@@ -33,7 +33,16 @@ namespace ArnoBot.Core
             if (commandObject == null)
                 return new ErrorResponse(Response.Type.NotFound, new CommandNotFoundException($"Command \"{commandContext.CommandName}\" could not be found."));
             else
-                return ExecuteCommand(commandObject, commandContext);
+            {
+                try
+                {
+                    return executeAction(commandObject, commandContext);
+                }
+                catch (Exception ex)
+                {
+                    return new ErrorResponse(Response.Type.Error, ex);
+                }
+            }
         }
 
         public Response Query(string command)
@@ -47,18 +56,6 @@ namespace ArnoBot.Core
                     return module.CommandRegistry[commandContext.CommandName];
             }
             return null;
-        }
-
-        private Response ExecuteCommand(ICommand command, CommandContext commandContext)
-        {
-            try
-            {
-                return command.Execute(commandContext);
-            }
-            catch(Exception ex)
-            {
-                return new ErrorResponse(Response.Type.Error, ex);
-            }
         }
 
         public void QueryAsync(string command, Func<ICommand, CommandContext, Response> executeAction, Action<Response> callback)
