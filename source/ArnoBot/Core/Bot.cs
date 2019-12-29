@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using ArnoBot.Interface;
 using ArnoBot.Core.Responses;
-using ArnoBot.Core.Exceptions;
 
 namespace ArnoBot.Core
 {
@@ -13,6 +12,7 @@ namespace ArnoBot.Core
 
         public FindCommandFromContext FindCommandFromContextDelegate { get; set; }
         public ExecuteCommand ExecuteCommandDelegate { get; set; }
+        public ParseCommandContext ParseCommandContextDelegate { get; set; }
         public ModuleRegistry ModuleRegistry { get; }
 
         private Bot()
@@ -20,6 +20,7 @@ namespace ArnoBot.Core
             ModuleRegistry = new ModuleRegistry();
             FindCommandFromContextDelegate = new FindCommandFromContext(FindCommandFromContextInternal);
             ExecuteCommandDelegate = new ExecuteCommand(ExecuteCommandInternal);
+            ParseCommandContextDelegate = new ParseCommandContext(CommandContext.Parse);
         }
 
         public static Bot CreateOrGet()
@@ -41,6 +42,7 @@ namespace ArnoBot.Core
                 return ExecuteCommandDelegate(commandObject, commandContext);
         }
 
+        public delegate CommandContext ParseCommandContext(string command);
         public delegate ICommand FindCommandFromContext(CommandContext commandContext);
         public delegate Response ExecuteCommand(ICommand command, CommandContext commandContext);
 
