@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArnoBot.Core.Exceptions
+namespace ArnoBot.Core
 {
 
     [Serializable]
