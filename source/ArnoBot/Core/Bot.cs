@@ -11,11 +11,15 @@ namespace ArnoBot.Core
     {
         private static Bot singleton;
 
+        public FindCommandFromContext FindCommandFromContextDelegate { get; set; }
+        public ExecuteCommand ExecuteCommandDelegate { get; set; }
         public ModuleRegistry ModuleRegistry { get; }
 
         private Bot()
         {
             ModuleRegistry = new ModuleRegistry();
+            FindCommandFromContextDelegate = new FindCommandFromContext(FindCommandFromContextInternal);
+            ExecuteCommandDelegate = new ExecuteCommand(ExecuteCommandInternal);
         }
 
         public static Bot CreateOrGet()
@@ -29,23 +33,36 @@ namespace ArnoBot.Core
 
         public Response Query(string command)
         {
+            CommandContext commandContext = CommandContext.Parse(command);
+            ICommand commandObject = FindCommandFromContextDelegate(commandContext);
+            if (commandObject == null)
+                return new ErrorResponse(Response.Type.NotFound, new CommandNotFoundException($"Command \"{commandContext.CommandName}\" could not be found."));
+            else
+                return ExecuteCommandDelegate(commandObject, commandContext);
+        }
+
+        public delegate ICommand FindCommandFromContext(CommandContext commandContext);
+        public delegate Response ExecuteCommand(ICommand command, CommandContext commandContext);
+
+        private ICommand FindCommandFromContextInternal(CommandContext commandContext)
+        {
+            foreach(IModule module in ModuleRegistry.GetModules())
+            {
+                if (module.CommandRegistry.ContainsKey(commandContext.CommandName))
+                    return module.CommandRegistry[commandContext.CommandName];
+            }
+            return null;
+        }
+
+        private Response ExecuteCommandInternal(ICommand command, CommandContext commandContext)
+        {
             try
             {
-                CommandContext context = CommandContext.Parse(command);
-                foreach (IModule module in ModuleRegistry.GetModules())
-                {
-                    if (module.CommandRegistry.ContainsKey(context.CommandName))
-                        return module.CommandRegistry[context.CommandName].Execute(context);
-                }
-                throw new CommandNotFoundException($"Command {context.CommandName} could not be found.");
+                return command.Execute(commandContext);
             }
-            catch(CommandNotFoundException notFoundException)
+            catch(Exception ex)
             {
-                return new ErrorResponse(Response.Type.NotFound, notFoundException);
-            }
-            catch(Exception exception)
-            {
-                return new ErrorResponse(Response.Type.Error, exception);
+                return new ErrorResponse(Response.Type.Error, ex);
             }
         }
 
