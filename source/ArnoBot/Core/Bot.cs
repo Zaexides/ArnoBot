@@ -26,7 +26,7 @@ namespace ArnoBot.Core
             return singleton;
         }
 
-        public Response Query(string command, Action<ICommand, CommandContext> executeAction)
+        public Response Query(string command, Func<ICommand, CommandContext, Response> executeAction)
         {
             CommandContext commandContext = CommandContext.Parse(command);
             ICommand commandObject = FindCommandFromContext(commandContext);
@@ -61,7 +61,7 @@ namespace ArnoBot.Core
             }
         }
 
-        public void QueryAsync(string command, Action<ICommand, CommandContext> executeAction, Action<Response> callback)
+        public void QueryAsync(string command, Func<ICommand, CommandContext, Response> executeAction, Action<Response> callback)
         {
             Task task = new Task(() =>
             {
