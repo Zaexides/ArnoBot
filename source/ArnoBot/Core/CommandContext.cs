@@ -17,7 +17,7 @@ namespace ArnoBot.Core
             this.Parameters = parameters;
         }
 
-        internal static CommandContext Parse(string receivedCommand)
+        public static CommandContext Parse(string receivedCommand)
         {
             List<string> queryParts = new List<string>(receivedCommand.Split(' '));
             queryParts.RemoveAll((s) => { return s == null || s.Equals(string.Empty); });
