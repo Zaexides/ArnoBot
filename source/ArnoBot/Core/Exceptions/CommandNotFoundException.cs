@@ -6,7 +6,7 @@ namespace ArnoBot.Core.Exceptions
 {
 
     [Serializable]
-    class CommandNotFoundException : Exception
+    public class CommandNotFoundException : Exception
     {
         public CommandNotFoundException() { }
         public CommandNotFoundException(string message) : base(message) { }
