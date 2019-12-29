@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArnoBot.ModuleLoader", "Arn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArnoBot.FrontEnd.DiscordBot", "ArnoBot.FrontEnd.DiscordBot\ArnoBot.FrontEnd.DiscordBot.csproj", "{D70169AB-45C7-4DC3-9C47-984885915388}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArnoBot.DiscordBot.Interface", "ArnoBot.DiscordBot.Interface\ArnoBot.DiscordBot.Interface.csproj", "{E47BB697-9E9E-4A1A-BD7B-F4702A53FE19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArnoBot.DiscordBot.Interface", "ArnoBot.DiscordBot.Interface\ArnoBot.DiscordBot.Interface.csproj", "{E47BB697-9E9E-4A1A-BD7B-F4702A53FE19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

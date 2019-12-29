@@ -7,6 +7,9 @@ using Discord.WebSocket;
 
 using ArnoBot.Core;
 using ArnoBot.Core.Responses;
+using ArnoBot.Interface;
+
+using ArnoBot.DiscordBot.Interface;
 
 namespace ArnoBot.FrontEnd.DiscordBot
 {
@@ -27,9 +30,29 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private async Task OnMessageReceived(SocketMessage message)
         {
             if (IsDirectedAtBot(message))
-                bot.QueryAsync(SanitizeMessageContent(message), (response) => OnQueryResultCallback(message.Author, message.Channel, response));
+                bot.QueryAsync(
+                    SanitizeMessageContent(message),
+                    (cmd, ctx) => ExecuteCommand(cmd, ctx, message),
+                    (response) => OnQueryResultCallback(message.Author, message.Channel, response)
+                    );
             else
                 await Task.CompletedTask;
+        }
+
+        private Response ExecuteCommand(ICommand command, CommandContext context, SocketMessage socketMessage)
+        {
+            if (command is IDiscordCommand)
+            {
+                DiscordCommandContext discordCommandContext = new DiscordCommandContext(
+                    context,
+                    socketMessage.Channel,
+                    socketMessage.Author,
+                    client.CurrentUser
+                    );
+                return (command as IDiscordCommand).Execute(discordCommandContext);
+            }
+            else
+                return command.Execute(context);
         }
 
         private void OnQueryResultCallback(SocketUser user, ISocketMessageChannel channel, Response response)
