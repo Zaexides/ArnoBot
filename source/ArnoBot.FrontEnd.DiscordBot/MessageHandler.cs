@@ -45,6 +45,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
             {
                 DiscordCommandContext discordCommandContext = new DiscordCommandContext(
                     context,
+                    socketMessage,
                     socketMessage.Channel,
                     socketMessage.Author,
                     client.CurrentUser
