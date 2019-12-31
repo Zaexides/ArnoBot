@@ -87,6 +87,8 @@ namespace ArnoBot.FrontEnd.DiscordBot
                 SetEmbedContentFromResponse(builder, response as ExtendedResponse);
             else if (response is ErrorResponse)
                 SetEmbedContentFromResponse(builder, response as ErrorResponse);
+            else if (response is FileResponse)
+                SetEmbedContentFromResponse(builder, response as FileResponse);
         }
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, TextResponse textResponse)
@@ -112,6 +114,12 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             builder.WithTitle(errorResponse.Body.GetType().FullName)
                 .WithDescription(errorResponse.Body.Message);
+        }
+
+        private void SetEmbedContentFromResponse(EmbedBuilder builder, FileResponse fileResponse)
+        {
+            builder.WithDescription(fileResponse.Body.Text)
+                .WithImageUrl(fileResponse.Body.ImageURL);
         }
 
         private Color GetColorFromResponseType(Response.Type responseType)
