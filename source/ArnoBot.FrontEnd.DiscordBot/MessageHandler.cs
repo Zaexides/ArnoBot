@@ -71,7 +71,11 @@ namespace ArnoBot.FrontEnd.DiscordBot
                         .WithIconUrl(user.GetAvatarUrl(size: 64))
                     );
                 SetEmbedContentFromResponse(builder, response);
-                await channel.SendMessageAsync(embed: builder.Build());
+
+                if (response is FileResponse && (response as FileResponse).Body.IsAttachment)
+                    await channel.SendFileAsync((response as FileResponse).Body.ImageURL, embed: builder.Build());
+                else
+                    await channel.SendMessageAsync(embed: builder.Build());
             }
             catch(Exception ex)
             {
@@ -118,8 +122,9 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, FileResponse fileResponse)
         {
+            Console.WriteLine(fileResponse.Body.IsAttachment);
             builder.WithDescription(fileResponse.Body.Text)
-                .WithImageUrl(fileResponse.Body.ImageURL);
+                .WithImageUrl((fileResponse.Body.IsAttachment ? "attachment://" : "") + fileResponse.Body.ImageFileName);
         }
 
         private Color GetColorFromResponseType(Response.Type responseType)
