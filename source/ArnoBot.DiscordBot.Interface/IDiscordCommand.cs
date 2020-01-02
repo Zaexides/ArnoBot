@@ -8,6 +8,7 @@ namespace ArnoBot.DiscordBot.Interface
 {
     public interface IDiscordCommand : ICommand
     {
+        bool IsNSFW { get; }
         Response Execute(DiscordCommandContext commandContext);
     }
 }

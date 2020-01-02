@@ -19,6 +19,8 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private DiscordSocketClient client;
         private readonly string prefix;
 
+        private Response noNSFWChannelResponse = new TextResponse(Response.Type.NotFound, "You can't use NSFW commands here.");
+
         public MessageHandler(DiscordSocketClient client, Bot bot, string prefix)
         {
             this.bot = bot;
@@ -43,6 +45,9 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             if (command is IDiscordCommand)
             {
+                if ((command as IDiscordCommand).IsNSFW && !IsNSFWChannel(socketMessage.Channel))
+                    return noNSFWChannelResponse;
+
                 DiscordCommandContext discordCommandContext = new DiscordCommandContext(
                     context,
                     socketMessage,
@@ -54,6 +59,14 @@ namespace ArnoBot.FrontEnd.DiscordBot
             }
             else
                 return command.Execute(context);
+        }
+
+        private bool IsNSFWChannel(ISocketMessageChannel channel)
+        {
+            if (channel is ITextChannel)
+                return (channel as ITextChannel).IsNsfw;
+            else
+                return true;
         }
 
         private void OnQueryResultCallback(SocketUser user, ISocketMessageChannel channel, Response response)
