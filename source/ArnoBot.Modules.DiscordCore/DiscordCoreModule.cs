@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ArnoBot.DiscordBot.Interface;
 using ArnoBot.Interface;
+using Discord.WebSocket;
+
+using ArnoBot.Modules.DiscordCore.Commands;
 
 namespace ArnoBot.Modules.DiscordCore
 {
@@ -13,6 +17,10 @@ namespace ArnoBot.Modules.DiscordCore
 
         public IReadOnlyDictionary<string, ICommand> CommandRegistry => commandRegistry;
 
-        
+        public DiscordCoreModule()
+        {
+            commandRegistry.Add("invite", new InviteCommand());
+            commandRegistry.Add("ping", new PingCommand());
+        }
     }
 }
