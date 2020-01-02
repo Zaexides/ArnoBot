@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using ArnoBot.Core;
 using ArnoBot.ModuleLoader;
 using ArnoBot.Modules.Core;
+using ArnoBot.DiscordBot.Interface;
 
 namespace ArnoBot.FrontEnd.DiscordBot
 {
@@ -35,6 +36,13 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             discordClient = new DiscordSocketClient();
             new MessageHandler(discordClient, bot, Settings.Prefix);
+            RegisterMessageReceivedEvents(bot.ModuleRegistry, discordClient);
+        }
+
+        private void RegisterMessageReceivedEvents(ModuleRegistry moduleRegistry, DiscordSocketClient discordClient)
+        {
+            foreach (IMessageEventListenerModule messageListenerModule in moduleRegistry.GetModules())
+                discordClient.MessageReceived += messageListenerModule.OnMessageReceived;
         }
 
         public async Task Run()
