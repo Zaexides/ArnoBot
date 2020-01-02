@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Discord.WebSocket;
@@ -44,7 +45,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private void RegisterMessageReceivedEvents(ModuleRegistry moduleRegistry, DiscordSocketClient discordClient)
         {
-            foreach (IMessageEventListenerModule messageListenerModule in moduleRegistry.GetModules())
+            foreach (IMessageEventListenerModule messageListenerModule in moduleRegistry.GetModules().Where((module) => module is IMessageEventListenerModule))
                 discordClient.MessageReceived += messageListenerModule.OnMessageReceived;
         }
 
