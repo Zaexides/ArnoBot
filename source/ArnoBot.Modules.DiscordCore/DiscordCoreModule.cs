@@ -21,6 +21,7 @@ namespace ArnoBot.Modules.DiscordCore
         {
             commandRegistry.Add("invite", new InviteCommand());
             commandRegistry.Add("ping", new PingCommand());
+            commandRegistry.Add("setplaying", new SetPlayingCommand());
         }
     }
 }
