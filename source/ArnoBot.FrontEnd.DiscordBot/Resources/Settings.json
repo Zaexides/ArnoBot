@@ -1,4 +1,5 @@
 {
   "BotToken": "Enter token here",
-  "Prefix": "t."
+  "Prefix": "t.",
+  "Owners": []
 }

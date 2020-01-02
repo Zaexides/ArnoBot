@@ -14,6 +14,8 @@ namespace ArnoBot.FrontEnd.DiscordBot
         internal string BotToken { get => internalSettings.BotToken; }
         public string Prefix { get => internalSettings.Prefix; }
 
+        public IReadOnlyList<ulong> Owners { get => internalSettings.Owners; }
+
         private Settings(InternalSettings internalSettings)
         {
             this.internalSettings = internalSettings;
@@ -29,6 +31,8 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             public string BotToken { get; set; }
             public string Prefix { get; set; }
+
+            public ulong[] Owners { get; set; }
         }
     }
 }
