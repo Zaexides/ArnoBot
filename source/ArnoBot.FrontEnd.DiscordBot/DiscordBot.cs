@@ -36,6 +36,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             discordClient = new DiscordSocketClient();
             new MessageHandler(discordClient, bot, Settings.Prefix);
+            new DiscordUtils(discordClient);
             RegisterMessageReceivedEvents(bot.ModuleRegistry, discordClient);
         }
 
