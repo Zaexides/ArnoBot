@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using ArnoBot.Core;
 using ArnoBot.ModuleLoader;
 using ArnoBot.Modules.Core;
+using ArnoBot.Modules.DiscordCore;
 using ArnoBot.DiscordBot.Interface;
 
 namespace ArnoBot.FrontEnd.DiscordBot
@@ -28,6 +29,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             Bot bot = Bot.CreateOrGet();
             bot.ModuleRegistry.RegisterModule(new CoreModule());
+            bot.ModuleRegistry.RegisterModule(new DiscordCoreModule());
             ModuleLoader.ModuleLoader.LoadModules(bot.ModuleRegistry);
             return bot;
         }
