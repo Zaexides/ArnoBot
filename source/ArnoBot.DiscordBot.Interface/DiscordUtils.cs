@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Discord;
@@ -40,14 +42,20 @@ namespace ArnoBot.DiscordBot.Interface
 
         public int Latency => client.Latency;
 
-        public DiscordUtils(DiscordSocketClient client)
+        public IReadOnlyList<ulong> Owners { get; }
+
+        public DiscordUtils(DiscordSocketClient client, IReadOnlyList<ulong> ownerList)
         {
             Main = this;
             this.client = client;
+            this.Owners = ownerList;
         }
 
         public SocketChannel GetChannelByID(ulong channelId) => client.GetChannel(channelId);
         public SocketGuild GetGuildByID(ulong guildId) => client.GetGuild(guildId);
         public SocketUser GetUserByID(ulong userId) => client.GetUser(userId);
+
+        public bool IsUserBotOwner(SocketUser user)
+            => Owners.Contains(user.Id);
     }
 }
