@@ -18,6 +18,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private Bot bot;
         private DiscordSocketClient client;
         private readonly string prefix;
+        private MessageHandlerModule module = new MessageHandlerModule();
 
         private Response noNSFWChannelResponse = new TextResponse(Response.Type.NotFound, "You can't use NSFW commands here.");
 
@@ -92,7 +93,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
+                Logger.LogError(module, ex);
             }
         }
 
@@ -166,5 +167,11 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private string SanitizeMessageContent(string messageContent)
             => messageContent.Remove(0, prefix.Length).Trim();
+
+        private class MessageHandlerModule : IModule
+        {
+            public string Name => "MessageHandler";
+            public IReadOnlyCommandRegistry CommandRegistry => throw new ArgumentException("MessageHandlerModule is not a Command module!");
+        }
     }
 }
