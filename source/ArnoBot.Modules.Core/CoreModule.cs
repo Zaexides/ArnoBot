@@ -10,11 +10,11 @@ namespace ArnoBot.Modules.Core
 {
     public class CoreModule : IModule
     {
-        private Dictionary<string, ICommand> commandRegistry = new Dictionary<string, ICommand>();
+        private CommandRegistry commandRegistry = new CommandRegistry();
 
         public string Name => "Core";
 
-        public IReadOnlyDictionary<string, ICommand> CommandRegistry => commandRegistry;
+        public IReadOnlyCommandRegistry CommandRegistry => commandRegistry;
 
         public CoreModule()
         {

@@ -8,6 +8,6 @@ namespace ArnoBot.Interface
     {
         string Name { get; }
 
-        IReadOnlyDictionary<string, ICommand> CommandRegistry { get; }
+        IReadOnlyCommandRegistry CommandRegistry { get; }
     }
 }

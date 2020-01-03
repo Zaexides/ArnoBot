@@ -11,11 +11,11 @@ namespace ArnoBot.Modules.DiscordCore
 {
     public class DiscordCoreModule : IDiscordModule
     {
-        private Dictionary<string, ICommand> commandRegistry = new Dictionary<string, ICommand>();
+        private CommandRegistry commandRegistry = new CommandRegistry();
 
         public string Name => "Discord";
 
-        public IReadOnlyDictionary<string, ICommand> CommandRegistry => commandRegistry;
+        public IReadOnlyCommandRegistry CommandRegistry => commandRegistry;
 
         public DiscordCoreModule()
         {

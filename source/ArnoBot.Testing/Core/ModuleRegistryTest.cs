@@ -49,7 +49,7 @@ namespace ArnoBot.Testing.Core
         {
             public string Name { get => MOCK_MODULE_NAME; }
 
-            public IReadOnlyDictionary<string, ICommand> CommandRegistry => throw new NotImplementedException();
+            public IReadOnlyCommandRegistry CommandRegistry => throw new NotImplementedException();
         }
     }
 }

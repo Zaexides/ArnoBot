@@ -81,9 +81,9 @@ namespace ArnoBot.Testing.Core
         {
             public string Name => "__Mock";
 
-            private Dictionary<string, ICommand> commandRegistry = new Dictionary<string, ICommand>();
+            private CommandRegistry commandRegistry = new CommandRegistry();
 
-            public IReadOnlyDictionary<string, ICommand> CommandRegistry => commandRegistry;
+            public IReadOnlyCommandRegistry CommandRegistry => commandRegistry;
 
             public MockModule()
             {
