@@ -135,7 +135,6 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, FileResponse fileResponse)
         {
-            Console.WriteLine(fileResponse.Body.IsAttachment);
             builder.WithDescription(fileResponse.Body.Text)
                 .WithImageUrl((fileResponse.Body.IsAttachment ? "attachment://" : "") + fileResponse.Body.ImageFileName);
         }
