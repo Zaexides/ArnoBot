@@ -130,8 +130,9 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, ErrorResponse errorResponse)
         {
-            builder.WithTitle(errorResponse.Body.GetType().FullName)
-                .WithDescription(errorResponse.Body.Message);
+            Logger.LogError(module, errorResponse.Exception);
+            builder.WithTitle("An error occured!")
+                .WithDescription("Oops! Please try again later!");
         }
 
         private void SetEmbedContentFromResponse(EmbedBuilder builder, FileResponse fileResponse)
