@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using ArnoBot.Interface;
 using ArnoBot.Core.Responses;
-using ArnoBot.Core.Exceptions;
 
 namespace ArnoBot.Core
 {
@@ -27,36 +26,49 @@ namespace ArnoBot.Core
             return singleton;
         }
 
-        public Response Query(string command)
+        public Response Query(string command, Func<ICommand, CommandContext, Response> executeAction)
         {
-            try
+            CommandContext commandContext = CommandContext.Parse(command);
+            ICommand commandObject = FindCommandFromContext(commandContext);
+            if (commandObject == null)
+                return new ErrorResponse(Response.Type.NotFound, new CommandNotFoundException($"Command \"{commandContext.CommandName}\" could not be found."));
+            else
             {
-                CommandContext context = CommandContext.Parse(command);
-                foreach (IModule module in ModuleRegistry.GetModules())
+                try
                 {
-                    if (module.CommandRegistry.ContainsKey(context.CommandName))
-                        return module.CommandRegistry[context.CommandName].Execute(context);
+                    return executeAction(commandObject, commandContext);
                 }
-                throw new CommandNotFoundException($"Command {context.CommandName} could not be found.");
-            }
-            catch(CommandNotFoundException notFoundException)
-            {
-                return new ErrorResponse(Response.Type.NotFound, notFoundException);
-            }
-            catch(Exception exception)
-            {
-                return new ErrorResponse(Response.Type.Error, exception);
+                catch (Exception ex)
+                {
+                    return new ErrorResponse(Response.Type.Error, ex);
+                }
             }
         }
 
-        public void QueryAsync(string command, Action<Response> callback)
+        public Response Query(string command)
+            => Query(command, (commandObject, ctx) => commandObject.Execute(ctx));
+
+        private ICommand FindCommandFromContext(CommandContext commandContext)
+        {
+            foreach(IModule module in ModuleRegistry.GetModules())
+            {
+                if (module.CommandRegistry.ContainsKey(commandContext.CommandName))
+                    return module.CommandRegistry[commandContext.CommandName];
+            }
+            return null;
+        }
+
+        public void QueryAsync(string command, Func<ICommand, CommandContext, Response> executeAction, Action<Response> callback)
         {
             Task task = new Task(() =>
             {
-                callback(Query(command));
+                callback(Query(command, executeAction));
             });
             task.Start();
         }
+
+        public void QueryAsync(string command, Action<Response> callback)
+            => QueryAsync(command, (commandObject, ctx) => commandObject.Execute(ctx), callback);
 
         public void Dispose()
         {

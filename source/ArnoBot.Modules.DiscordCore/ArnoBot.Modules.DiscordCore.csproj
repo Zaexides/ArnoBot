@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ArnoBot.DiscordBot.Interface\ArnoBot.DiscordBot.Interface.csproj" />
     <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
   </ItemGroup>
 

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArnoBot.Core.Exceptions
+namespace ArnoBot.Core
 {
 
     [Serializable]
-    class CommandNotFoundException : Exception
+    public class CommandNotFoundException : ArnoBotException
     {
+        public override string SimpleName => "Command not found";
+
         public CommandNotFoundException() { }
         public CommandNotFoundException(string message) : base(message) { }
         public CommandNotFoundException(string message, Exception inner) : base(message, inner) { }

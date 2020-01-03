@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Discord.WebSocket;
@@ -6,6 +7,8 @@ using Discord.WebSocket;
 using ArnoBot.Core;
 using ArnoBot.ModuleLoader;
 using ArnoBot.Modules.Core;
+using ArnoBot.Modules.DiscordCore;
+using ArnoBot.DiscordBot.Interface;
 
 namespace ArnoBot.FrontEnd.DiscordBot
 {
@@ -27,6 +30,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             Bot bot = Bot.CreateOrGet();
             bot.ModuleRegistry.RegisterModule(new CoreModule());
+            bot.ModuleRegistry.RegisterModule(new DiscordCoreModule());
             ModuleLoader.ModuleLoader.LoadModules(bot.ModuleRegistry);
             return bot;
         }
@@ -35,6 +39,14 @@ namespace ArnoBot.FrontEnd.DiscordBot
         {
             discordClient = new DiscordSocketClient();
             new MessageHandler(discordClient, bot, Settings.Prefix);
+            new DiscordUtils(discordClient, Settings.Owners);
+            RegisterMessageReceivedEvents(bot.ModuleRegistry, discordClient);
+        }
+
+        private void RegisterMessageReceivedEvents(ModuleRegistry moduleRegistry, DiscordSocketClient discordClient)
+        {
+            foreach (IMessageEventListenerModule messageListenerModule in moduleRegistry.GetModules().Where((module) => module is IMessageEventListenerModule))
+                discordClient.MessageReceived += messageListenerModule.OnMessageReceived;
         }
 
         public async Task Run()

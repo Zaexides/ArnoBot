@@ -13,6 +13,7 @@
     <ProjectReference Include="..\ArnoBot.DiscordBot.Interface\ArnoBot.DiscordBot.Interface.csproj" />
     <ProjectReference Include="..\ArnoBot.ModuleLoader\ArnoBot.ModuleLoader.csproj" />
     <ProjectReference Include="..\ArnoBot.Modules.Core\ArnoBot.Modules.Core.csproj" />
+    <ProjectReference Include="..\ArnoBot.Modules.DiscordCore\ArnoBot.Modules.DiscordCore.csproj" />
     <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
   </ItemGroup>
 
