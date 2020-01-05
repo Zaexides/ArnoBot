@@ -17,11 +17,16 @@ namespace ArnoBot.Modules.DiscordCore
 
         public IReadOnlyCommandRegistry CommandRegistry => commandRegistry;
 
+        public Settings ModuleSettings { get; }
+
         public DiscordCoreModule()
         {
+            ModuleSettings = Settings.Load();
+
             commandRegistry.Add("invite", new InviteCommand());
             commandRegistry.Add("ping", new PingCommand());
             commandRegistry.Add("setplaying", new SetPlayingCommand());
+            commandRegistry.Add("help", new HelpCommand(ModuleSettings.HelpReferenceSite));
         }
     }
 }
