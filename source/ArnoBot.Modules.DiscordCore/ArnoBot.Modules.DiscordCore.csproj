@@ -6,11 +6,18 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.1.1" />
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ArnoBot.DiscordBot.Interface\ArnoBot.DiscordBot.Interface.csproj" />
     <ProjectReference Include="..\ArnoBot\ArnoBot.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\DiscordCoreSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

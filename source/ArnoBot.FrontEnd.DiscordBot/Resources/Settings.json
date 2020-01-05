@@ -1,5 +1,6 @@
 {
   "BotToken": "Enter token here",
   "Prefix": "t.",
+  "PlayingStatus": "",
   "Owners": []
 }
