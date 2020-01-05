@@ -40,8 +40,15 @@ namespace ArnoBot.FrontEnd.DiscordBot
             discordClient = new DiscordSocketClient();
             new MessageHandler(discordClient, bot, Settings.Prefix);
             new DiscordUtils(discordClient, Settings.Owners);
+
+            DiscordUtils.Main.BotActivity = new Discord.Game(Settings.PlayingStatus);
+            DiscordUtils.Main.activityChanged += OnActivityChanged;
+
             RegisterMessageReceivedEvents(bot.ModuleRegistry, discordClient);
         }
+
+        private void OnActivityChanged(object sender, DiscordUtils.ActivityChangedEventArgs e)
+            => Settings.PlayingStatus = e.NewActivity.Name;
 
         private void RegisterMessageReceivedEvents(ModuleRegistry moduleRegistry, DiscordSocketClient discordClient)
         {

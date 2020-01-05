@@ -14,6 +14,16 @@ namespace ArnoBot.FrontEnd.DiscordBot
         internal string BotToken { get => internalSettings.BotToken; }
         public string Prefix { get => internalSettings.Prefix; }
 
+        public string PlayingStatus
+        {
+            get => internalSettings.PlayingStatus;
+            set
+            {
+                internalSettings.PlayingStatus = value;
+                Save();
+            }
+        }
+
         public IReadOnlyList<ulong> Owners { get => internalSettings.Owners; }
 
         private Settings(InternalSettings internalSettings)
@@ -27,11 +37,19 @@ namespace ArnoBot.FrontEnd.DiscordBot
             return new Settings(internalSettings);
         }
 
+        internal void Save()
+        {
+            File.WriteAllText(FILE_PATH,
+                JsonSerializer.Serialize(internalSettings, new JsonSerializerOptions() {
+                    WriteIndented = true,
+                }));
+        }
+
         private class InternalSettings
         {
             public string BotToken { get; set; }
             public string Prefix { get; set; }
-
+            public string PlayingStatus { get; set; }
             public ulong[] Owners { get; set; }
         }
     }

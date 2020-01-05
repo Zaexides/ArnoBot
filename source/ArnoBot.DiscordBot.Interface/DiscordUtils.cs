@@ -12,6 +12,8 @@ namespace ArnoBot.DiscordBot.Interface
     {
         private DiscordSocketClient client;
 
+        public EventHandler<ActivityChangedEventArgs> activityChanged;
+
         public static DiscordUtils Main { get; private set; }
 
         public ulong BotID { get => client.CurrentUser.Id; }
@@ -35,7 +37,9 @@ namespace ArnoBot.DiscordBot.Interface
             {
                 Task.Run(async () =>
                 {
+                    IActivity oldActivity = BotActivity;
                     await client.SetActivityAsync(value);
+                    activityChanged?.Invoke(this, new ActivityChangedEventArgs(oldActivity, value));
                 });
             }
         }
@@ -57,5 +61,17 @@ namespace ArnoBot.DiscordBot.Interface
 
         public bool IsUserBotOwner(SocketUser user)
             => Owners.Contains(user.Id);
+
+        public class ActivityChangedEventArgs : EventArgs
+        {
+            public IActivity OldActivity { get; }
+            public IActivity NewActivity { get; }
+
+            public ActivityChangedEventArgs(IActivity oldActivity, IActivity newActivity)
+            {
+                this.OldActivity = oldActivity;
+                this.NewActivity = newActivity;
+            }
+        }
     }
 }
