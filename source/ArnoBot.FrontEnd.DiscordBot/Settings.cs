@@ -12,7 +12,10 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private InternalSettings internalSettings;
 
         internal string BotToken { get => internalSettings.BotToken; }
-        public string Prefix { get => internalSettings.Prefix; }
+        [Obsolete("Use Settings.Prefixes instead.")]
+        public string Prefix { get => internalSettings.Prefixes[0]; }
+        public string[] Prefixes { get => internalSettings.Prefixes; }
+        public bool ReactOnMention { get => internalSettings.ReactOnMention; }
 
         public string PlayingStatus
         {
@@ -48,7 +51,8 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private class InternalSettings
         {
             public string BotToken { get; set; }
-            public string Prefix { get; set; }
+            public string[] Prefixes { get; set; }
+            public bool ReactOnMention { get; set; }
             public string PlayingStatus { get; set; }
             public ulong[] Owners { get; set; }
         }

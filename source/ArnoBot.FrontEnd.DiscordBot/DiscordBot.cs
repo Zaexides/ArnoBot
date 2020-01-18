@@ -38,7 +38,7 @@ namespace ArnoBot.FrontEnd.DiscordBot
         private void InitializeDiscordIntegration(Bot bot)
         {
             discordClient = new DiscordSocketClient();
-            new MessageHandler(discordClient, bot, Settings.Prefix);
+            new MessageHandler(discordClient, bot, Settings.Prefixes, Settings.ReactOnMention);
             new DiscordUtils(discordClient, Settings.Owners);
 
             DiscordUtils.Main.BotActivity = new Discord.Game(Settings.PlayingStatus);

@@ -17,16 +17,18 @@ namespace ArnoBot.FrontEnd.DiscordBot
     {
         private Bot bot;
         private DiscordSocketClient client;
-        private readonly string prefix;
+        private readonly string[] prefixes;
+        private readonly bool listenToMentions;
         private MessageHandlerModule module = new MessageHandlerModule();
 
         private Response noNSFWChannelResponse = new TextResponse(Response.Type.NotFound, "You can't use NSFW commands here.");
 
-        public MessageHandler(DiscordSocketClient client, Bot bot, string prefix)
+        public MessageHandler(DiscordSocketClient client, Bot bot, string[] prefixes, bool listenToMentions)
         {
             this.bot = bot;
             this.client = client;
-            this.prefix = prefix;
+            this.prefixes = prefixes;
+            this.listenToMentions = listenToMentions;
             client.MessageReceived += OnMessageReceived;
         }
 
@@ -167,12 +169,13 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private bool IsDirectedAtBot(SocketMessage message, out TriggerInfo triggerInfo)
         {
-            if(message.Content.StartsWith(prefix))
+            string selectedPrefix = null;
+            if(prefixes.Any((prefix) => message.Content.StartsWith(selectedPrefix = prefix)))
             {
-                triggerInfo = new TriggerInfo(prefix, false);
+                triggerInfo = new TriggerInfo(selectedPrefix, false);
                 return true;
             }
-            else if(MessageStartsWithBotMention(message))
+            else if(listenToMentions && MessageStartsWithBotMention(message))
             {
                 triggerInfo = new TriggerInfo($"<@!{client.CurrentUser.Id}>", true);
                 return true;
