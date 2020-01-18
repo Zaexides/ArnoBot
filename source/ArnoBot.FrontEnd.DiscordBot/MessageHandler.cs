@@ -32,9 +32,10 @@ namespace ArnoBot.FrontEnd.DiscordBot
 
         private async Task OnMessageReceived(SocketMessage message)
         {
-            if (IsDirectedAtBot(message))
+            TriggerInfo triggerInfo;
+            if (IsDirectedAtBot(message, out triggerInfo))
                 bot.QueryAsync(
-                    SanitizeMessageContent(message),
+                    SanitizeMessageContent(message, triggerInfo),
                     (cmd, ctx) => ExecuteCommand(cmd, ctx, message),
                     (response) => OnQueryResultCallback(message.Author, message.Channel, response)
                     );
@@ -164,23 +165,53 @@ namespace ArnoBot.FrontEnd.DiscordBot
             }
         }
 
-        private bool IsDirectedAtBot(SocketMessage message)
+        private bool IsDirectedAtBot(SocketMessage message, out TriggerInfo triggerInfo)
         {
-            return
-                message.Content.StartsWith(prefix)
-                || message.MentionedUsers.First().Id.Equals(client.CurrentUser.Id);
+            if(message.Content.StartsWith(prefix))
+            {
+                triggerInfo = new TriggerInfo(prefix, false);
+                return true;
+            }
+            else if(MessageStartsWithBotMention(message))
+            {
+                triggerInfo = new TriggerInfo($"<@!{client.CurrentUser.Id}>", true);
+                return true;
+            }
+            else
+            {
+                triggerInfo = null;
+                return false;
+            }
         }
 
-        private string SanitizeMessageContent(SocketMessage message)
-            => SanitizeMessageContent(message.Content);
+        private bool MessageStartsWithBotMention(SocketMessage message)
+        {
+            return message.Content.StartsWith($"<@!{client.CurrentUser.Id}>")
+                && message.MentionedUsers.First().Id.Equals(client.CurrentUser.Id);
+        }
 
-        private string SanitizeMessageContent(string messageContent)
-            => messageContent.Remove(0, prefix.Length).Trim();
+        private string SanitizeMessageContent(SocketMessage message, TriggerInfo triggerInfo)
+            => SanitizeMessageContent(message.Content, triggerInfo);
+
+        private string SanitizeMessageContent(string messageContent, TriggerInfo triggerInfo)
+            => messageContent.Remove(0, triggerInfo.TriggerString.Length).Trim();
 
         private class MessageHandlerModule : IModule
         {
             public string Name => "MessageHandler";
             public IReadOnlyCommandRegistry CommandRegistry => throw new ArgumentException("MessageHandlerModule is not a Command module!");
+        }
+
+        private class TriggerInfo
+        {
+            public string TriggerString { get; }
+            public bool IsMention { get; }
+
+            public TriggerInfo(string triggerString, bool isMention)
+            {
+                this.TriggerString = triggerString;
+                this.IsMention = isMention;
+            }
         }
     }
 }
