@@ -173,7 +173,10 @@ namespace ArnoBot.FrontEnd.DiscordBot
             if(prefixes.Any((prefix) => message.Content.StartsWith(selectedPrefix = prefix)))
             {
                 triggerInfo = new TriggerInfo(selectedPrefix, false);
-                return true;
+                string prefixCutMessage = message.Content.Remove(0, selectedPrefix.Length);
+
+                // Bot should ignore messages that start with a prefix followed by non-alphanumeric characters.
+                return prefixCutMessage.Length > 0 && char.IsLetterOrDigit(prefixCutMessage[0]);
             }
             else if(listenToMentions && MessageStartsWithBotMention(message))
             {
